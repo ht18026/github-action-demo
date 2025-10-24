@@ -21,7 +21,8 @@ jobs:
         with:
           node-version: 20
           cache: npm
-
+      - name: cd demo
+        run: cd demo
       - name: Install deps
         run: npm ci
 
