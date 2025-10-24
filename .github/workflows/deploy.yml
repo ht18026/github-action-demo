@@ -21,14 +21,15 @@ jobs:
         with:
           node-version: 20
           cache: npm
-      - name: cd demo
-        run: cd demo
-      - name: Install deps
-        run: npm ci
+          # 让缓存找到依赖文件（你的 package-lock 在 demo/ 里）
+          cache-dependency-path: demo/package-lock.json
 
-      - name: Build
-        run: npm run build
-        # 如果构建期需要 VITE_* 变量（如地图 token），在此注入：
+      - name: Install & Build (in demo/)
+        run: |
+          cd demo
+          npm ci
+          npm run build
+        # 如果需要构建期变量就放这里
         # env:
         #   VITE_MAPBOX_TOKEN: ${{ secrets.VITE_MAPBOX_TOKEN }}
 
@@ -36,5 +37,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
-          folder: dist
+          folder: demo/dist
           clean: true
